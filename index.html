@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Blurred: five out-of-focus photos a day. Bring each one into focus and name it before you run out of points.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#dde1e4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1214" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Blurred">
+<meta property="og:description" content="Five blurred photos a day. Focus, guess, share.">
+<meta property="og:type" content="website">
+<script src="theme.js"></script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="shortcut icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Blurred – five photos a day</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Instrument+Sans:wght@400..600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<noscript><p class="ns">Blurred needs JavaScript to run.</p></noscript>
+<main>
+<!-- Icons: Lucide (ISC license), inlined. Photos: Wikipedia/Wikimedia Commons. -->
+<div class="wrap">
+  <aside class="rail l" aria-label="Today’s set">
+    <h2>Today’s set</h2>
+    <ol id="set"></ol>
+    <h2>Focus costs</h2>
+    <div id="leg"></div>
+  </aside>
+  <div class="c">
+  <header>
+    <div><h1>Blurred</h1><p class="date" id="date"></p></div>
+    <div class="hr"><nav id="chips" aria-label="Rounds"></nav>
+      <button class="ib" id="bs" type="button" aria-label="Your record"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21v-6"/><path d="M12 21V3"/><path d="M19 21V9"/></svg></button>
+      <button class="ib" id="bh" type="button" aria-label="How Blurred works"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button></div>
+  </header>
+  <section id="game" class="fade">
+    <div class="stage"><canvas id="c" width="480" height="480" tabindex="0" aria-label="Blurred photo. Tap a tile to bring it into focus. With a keyboard, use the arrow keys and Enter."></canvas><div class="sk" id="sk"></div></div>
+    <p id="credit" class="credit"></p>
+    <div class="focus"><span class="lbl">Focus left</span><div id="ticks"></div><b id="pts">20</b></div>
+    <p id="msg" aria-live="polite"></p>
+    <div id="hint" class="hint" aria-live="polite"></div>
+    <button id="retry" class="quiet" type="button" hidden>Try again</button>
+    <div class="dock">
+      <form id="gf" class="pane on" autocomplete="off">
+        <div class="field"><input id="in" name="guess" type="text" placeholder="What is it?" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your guess"></div>
+        <button type="submit">Guess</button>
+        <button type="button" id="skip" class="quiet">Skip</button>
+      </form>
+      <div id="np" class="pane"><button id="next" type="button">Next photo</button></div>
+    </div>
+    <p class="how">Tap a tile to soften it (1 point) and again to sharpen it (3 in total). You have 20 points a round. A wrong guess costs 3. Down to 10 points you get a hint, and at 3 or fewer, more. Stuck? Skip shows the photo for 0 points.</p>
+  </section>
+  <section id="sum" class="fade gone" hidden>
+    <h2 id="sh">Today’s focus</h2>
+    <span id="total"><span id="tn">0</span><small>/100</small></span>
+    <div id="cmp"></div>
+    <ul class="rows" id="rows"></ul>
+    <pre id="share"></pre>
+    <button id="cp" type="button">Copy result</button>
+    <p class="how">Photos and answers come from Wikipedia. Tap a name to read the article and see the photo’s license.</p>
+    <p class="next">Next set of photos in <b id="cd">--:--:--</b></p>
+  </section>
+  </div>
+  <aside class="rail r" aria-label="Your record"><div class="statbox"></div></aside>
+</div>
+<footer><p class="ft"><button class="ib" id="bc" type="button" aria-label="Copyright and credits"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg></button><span>Photos and answers come from Wikipedia. A new set arrives at midnight.</span></p>
+<div class="fb"><button class="ib" id="snd" type="button" aria-pressed="true" aria-label="Sound effects on"><svg viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="seg" role="group" aria-label="Colour theme">
+<button type="button" data-t="system" aria-label="Match system theme" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></button>
+<button type="button" data-t="light" aria-label="Light theme" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
+<button type="button" data-t="dark" aria-label="Dark theme" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button></div>
+</div>
+<a class="bmc" href="https://buymeacoffee.com/makarimsuso" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>Buy me a coffee</a>
+</footer>
+</main>
+<dialog id="dlg" aria-labelledby="dt"><div class="p"><div class="dh"><h3 id="dt"></h3><button class="ib" id="dx" type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><div id="db"></div></div></dialog>
+<script src="app.js" defer></script>
+</body>
+</html>
