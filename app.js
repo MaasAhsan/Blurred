@@ -18,7 +18,7 @@ const abs=u=>typeof u==='string'&&u.startsWith('//')?'https:'+u:u;
 const hostOf=u=>{try{return new URL(u,'https://x.invalid').hostname}catch(e){return'?'}};
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const N=6,S=480,C=S/N,B=20,COST=[0,1,2],ROUNDS=5,TRIES=3;
-const DEV=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+const DEV=true;/* dev panel works on every host; it is still behind the password gate */
 let OFF=0;if(DEV)try{OFF=Math.max(-1,Math.min(1,+sessionStorage.getItem('haze:dev:off')||0))}catch(e){}
 const t0=new Date(),DN=Math.floor((Date.UTC(t0.getFullYear(),t0.getMonth(),t0.getDate())-Date.UTC(2026,0,1))/864e5)+OFF;
 
@@ -383,7 +383,7 @@ function tests(){
 const store=()=>{try{localStorage.setItem('haze:t','1');localStorage.removeItem('haze:t');return true}catch(e){return false}};
 function devHTML(){
   const rs=tests(),ok=rs.filter(r=>r[1]).length,th=root.dataset.theme||'system';
-  const env=[['Day no.',(DN+1)+(OFF?' (preview)':'')],['Set',esc(IMG.map(i=>i.n).join(', '))||'loading'],['Theme',th+(th==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?' (dark)':' (light)'):'')],['Photos loaded',IMG.length+'/'+ROUNDS],['Round',Math.min(st.i+1,ROUNDS)],['Reduced motion',RM?'on':'off'],['Storage',store()?'available':'blocked']];
+  const env=[['Day no.',(DN+1)+(OFF?' (preview)':'')],['Set',esc(IMG.map(i=>i.n).join(', '))||'loading'],['Theme',th+(th==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?' (dark)':' (light)'):'')],['Language',LANG],['Photos loaded',IMG.length+'/'+ROUNDS],['Round',Math.min(st.i+1,ROUNDS)],['Reduced motion',RM?'on':'off'],['Storage',store()?'available':'blocked']];
   return `<dl class="env">${env.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
   <p class="pv"><span>Preview day</span><span class="seg days" role="group" aria-label="Preview day">${[[-1,'Yesterday'],[0,'Today'],[1,'Tomorrow']].map(([o,l])=>`<button type="button" data-a="day" data-o="${o}" aria-pressed="${o===OFF}">${l}</button>`).join('')}</span></p>
   <b>${ok}/${rs.length} tests passing</b>

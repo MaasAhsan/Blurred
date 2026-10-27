@@ -8,7 +8,7 @@ Static site plus two small Vercel functions. No build step.
    Without it the site still works and shows a modeled curve instead of live data.
 
 ## Local
-`npx vercel dev` (serves the site and /api). The developer panel (click the title 5 times or type `devmode`) only works on localhost; see `DEV` near the top of `app.js`.
+`npx vercel dev` (serves the site and /api). The developer panel (click the title 5 times or type `devmode`) works on every host, behind a password prompt; see `DEV` near the top of `app.js`.
 
 ## Files
 - `index.html`, `styles.css`, `app.js`, `theme.js`, `favicon.svg`: the game
