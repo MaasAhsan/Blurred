@@ -17,3 +17,5 @@ Static site plus two small Vercel functions. No build step.
 
 
 Note: localStorage and Redis keys still start with `haze:` on purpose, so existing players keep their streaks and stats.
+
+Languages: the game language (English, Mandarin Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Indonesian, Urdu) is chosen with the globe button. Photos are the same in every language; names, hints and article links come from that language's Wikipedia through the langlinks of the English article. Choice is stored in `haze:lang`.

@@ -36,6 +36,7 @@
   <header>
     <div><h1>Blurred</h1><p class="date" id="date"></p></div>
     <div class="hr"><nav id="chips" aria-label="Rounds"></nav>
+      <button class="ib" id="bl" type="button" aria-label="Game language" title="Language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></button>
       <button class="ib" id="bs" type="button" aria-label="Your record"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21v-6"/><path d="M12 21V3"/><path d="M19 21V9"/></svg></button>
       <button class="ib" id="bh" type="button" aria-label="How Blurred works"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button></div>
   </header>
@@ -43,18 +44,18 @@
     <div class="stage"><canvas id="c" width="480" height="480" tabindex="0" aria-label="Blurred photo. Tap a tile to bring it into focus. With a keyboard, use the arrow keys and Enter."></canvas><div class="sk" id="sk"></div></div>
     <p id="credit" class="credit"></p>
     <div class="focus"><span class="lbl">Focus left</span><div id="ticks"></div><b id="pts">20</b></div>
-    <p id="msg" aria-live="polite"></p>
-    <div id="hint" class="hint" aria-live="polite"></div>
+    <p id="msg" dir="auto" aria-live="polite"></p>
+    <div id="hint" class="hint" dir="auto" aria-live="polite"></div>
     <button id="retry" class="quiet" type="button" hidden>Try again</button>
     <div class="dock">
       <form id="gf" class="pane on" autocomplete="off">
-        <div class="field"><input id="in" name="guess" type="text" placeholder="What is it?" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your guess"></div>
+        <div class="field"><input id="in" dir="auto" name="guess" type="text" placeholder="What is it?" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your guess"></div>
         <button type="submit">Guess</button>
         <button type="button" id="skip" class="quiet">Skip</button>
       </form>
       <div id="np" class="pane"><button id="next" type="button">Next photo</button></div>
     </div>
-    <p class="how">Tap a tile to soften it (1 point) and again to sharpen it (3 in total). You have 20 points a round. A wrong guess costs 3. Down to 10 points you get a hint, and at 3 or fewer, more. Stuck? Skip shows the photo for 0 points.</p>
+    <p class="how">Tap a tile to soften it (1 point) and again to sharpen it (2 in total). You have 20 points a round. A wrong guess costs 3. Down to 10 points you get a hint, and at 3 or fewer, more. Stuck? Skip shows the photo for 0 points.</p>
   </section>
   <section id="sum" class="fade gone" hidden>
     <h2 id="sh">Today’s focus</h2>

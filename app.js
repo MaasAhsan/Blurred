@@ -1,5 +1,10 @@
 
-let IMG=[],order=[0,1,2,3,4];
+let IMG=[],ENG=[],order=[0,1,2,3,4];
+/* Game languages: [code, native name, English name]. The code doubles as the Wikipedia subdomain. */
+const LANGS=[['en','English','English'],['zh','中文','Mandarin Chinese'],['hi','हिन्दी','Hindi'],['es','Español','Spanish'],['ar','العربية','Modern Standard Arabic'],['fr','Français','French'],['bn','বাংলা','Bengali'],['pt','Português','Portuguese'],['id','Bahasa Indonesia','Indonesian'],['ur','اردو','Urdu']];
+const LK='haze:lang';let LANG='en';
+try{const v=localStorage.getItem(LK);if(LANGS.some(l=>l[0]===v))LANG=v}catch(e){}
+document.documentElement.lang=LANG==='zh'?'zh-Hans':LANG;
 const TITLES=["Giraffe", "Elephant", "Penguin", "Flamingo", "Octopus", "Zebra", "Kangaroo", "Giant panda", "Tiger", "Owl", "Monarch butterfly", "Jellyfish", "Peacock", "Camel", "Hedgehog", "Lion", "Polar bear", "Koala", "Seahorse", "Red panda", "Chameleon", "Sloth", "Toucan", "Walrus", "Eiffel Tower", "Statue of Liberty", "Big Ben", "Colosseum", "Taj Mahal", "Great Pyramid of Giza", "Golden Gate Bridge", "Sydney Opera House", "Leaning Tower of Pisa", "Mount Fuji", "Niagara Falls", "Pizza", "Sushi", "Croissant", "Pretzel", "Pineapple", "Banana", "Strawberry", "Pumpkin", "Sunflower", "Cactus", "Mushroom", "Tulip", "Windmill", "Lighthouse", "Bicycle", "Steam locomotive", "Hot air balloon", "Submarine", "Helicopter", "Tractor", "Skateboard", "Piano", "Acoustic guitar", "Violin", "Accordion", "Saxophone", "Telescope", "Microscope", "Compass", "Hourglass", "Anchor", "Umbrella", "Teapot", "Rubik's Cube", "Volcano", "Glacier", "Rainbow", "Waterfall", "Dolphin", "Whale shark", "Gorilla", "Cheetah", "Leopard", "Hippopotamus", "Rhinoceros", "Raccoon", "Red fox", "Gray wolf", "Moose", "American bison", "Llama", "Alpaca", "Parrot", "Bald eagle", "Swan", "Pelican", "Hummingbird", "Sea turtle", "Crocodile", "Frog", "Snail", "Honey bee", "Spider", "Crab", "Starfish", "Great white shark", "Clownfish", "Manta ray", "Squirrel", "Rabbit", "Horse", "Duck", "Ostrich", "Meerkat", "Sea otter", "Orangutan", "Chimpanzee", "Dragonfly", "Scorpion", "Lobster", "Puffin", "Pangolin", "Capybara", "Platypus", "Axolotl", "Machu Picchu", "Stonehenge", "Great Wall of China", "Petra", "Angkor Wat", "Burj Khalifa", "Brooklyn Bridge", "Tower Bridge", "Sagrada Família", "Christ the Redeemer (statue)", "Space Needle", "CN Tower", "Empire State Building", "Mount Everest", "Matterhorn", "Grand Canyon", "Uluru", "Hagia Sophia", "Neuschwanstein Castle", "Notre-Dame de Paris", "Acropolis of Athens", "Moai", "Hamburger", "Taco", "Doughnut", "Ice cream", "Watermelon", "Avocado", "Coconut", "Lemon", "Broccoli", "Cupcake", "Waffle", "Pancake", "Baguette", "Ramen", "Burrito", "Popcorn", "Carrot", "Cherry", "Kiwifruit", "Typewriter", "Dice", "Trumpet", "Harp", "Cello", "Flute", "Globe", "Kite", "Chess", "Sailboat", "Gondola", "Ferris wheel", "Roller coaster", "Motorcycle", "Canoe", "Igloo", "Pagoda", "Totem pole", "Lantern", "Candle", "Padlock", "Scissors", "Binoculars", "Sundial", "Kayak", "Snowman", "Trampoline", "Carousel", "Aurora", "Coral reef", "Geyser", "Iceberg", "Cave", "Lightning", "Bamboo", "Fern", "Lavender", "Rose", "Orchid", "Dandelion", "Cherry blossom", "Venus flytrap"];
 const EXTRA={"Giant panda": ["panda"], "Monarch butterfly": ["butterfly"], "Acoustic guitar": ["guitar"], "Steam locomotive": ["train", "locomotive"], "Great Pyramid of Giza": ["pyramid", "pyramids"], "Hot air balloon": ["balloon"], "Polar bear": ["bear"], "Sydney Opera House": ["opera house"], "Leaning Tower of Pisa": ["tower of pisa", "leaning tower"], "Statue of Liberty": ["lady liberty"], "Big Ben": ["clock tower"], "Rubik's Cube": ["rubiks cube", "cube"], "Golden Gate Bridge": ["golden gate"], "Mount Fuji": ["fuji"], "Niagara Falls": ["niagara"], "Colosseum": ["coliseum"], "Taj Mahal": ["taj"]};
 Object.assign(EXTRA,{"Hamburger":["burger","cheeseburger"],"Doughnut":["donut"],"Ferris wheel":["big wheel"],"Roller coaster":["rollercoaster","coaster"],"Great white shark":["shark"],"Whale shark":["shark"],"Sea turtle":["turtle"],"Bald eagle":["eagle"],"Red fox":["fox"],"Gray wolf":["wolf"],"American bison":["bison","buffalo"],"Sea otter":["otter"],"Honey bee":["bee"],"Mount Everest":["everest"],"Great Wall of China":["great wall","wall of china"],"Neuschwanstein Castle":["castle","neuschwanstein"],"Empire State Building":["empire state"],"Cherry blossom":["sakura"],"Venus flytrap":["flytrap"],"Totem pole":["totem"],"Hagia Sophia":["aya sofia"],"Notre-Dame de Paris":["notre dame"],"Acropolis of Athens":["acropolis"],"Coral reef":["reef"],"Christ the Redeemer (statue)":["christ the redeemer","redeemer"]});
@@ -12,7 +17,7 @@ let lastF=null;
 const abs=u=>typeof u==='string'&&u.startsWith('//')?'https:'+u:u;
 const hostOf=u=>{try{return new URL(u,'https://x.invalid').hostname}catch(e){return'?'}};
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const N=6,S=480,C=S/N,B=20,COST=[0,1,3],ROUNDS=5,TRIES=3;
+const N=6,S=480,C=S/N,B=20,COST=[0,1,2],ROUNDS=5,TRIES=3;
 const DEV=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
 let OFF=0;if(DEV)try{OFF=Math.max(-1,Math.min(1,+sessionStorage.getItem('haze:dev:off')||0))}catch(e){}
 const t0=new Date(),DN=Math.floor((Date.UTC(t0.getFullYear(),t0.getMonth(),t0.getDate())-Date.UTC(2026,0,1))/864e5)+OFF;
@@ -20,8 +25,15 @@ const t0=new Date(),DN=Math.floor((Date.UTC(t0.getFullYear(),t0.getMonth(),t0.ge
 /* Daily selection: a seeded shuffle gives everyone the same five distinct photos each day. */
 function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 /* Guess recognition: normalise, tolerate typos, match aliases, then compare categories. */
-const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z\s]/g,' ').replace(/\b(a|an|the|of|some|my|its|it|is|this|that)\b/g,' ').replace(/\s+/g,' ').trim();
-const sing=w=>w.length>3&&/s$/.test(w)&&!/ss$/.test(w)?w.replace(/ies$/,'y').replace(/s$/,''):w;
+const STOP={en:'a an the of some my its it is this that',es:'el la los las un una unos unas de del',fr:'le la les un une des du de l d',pt:'o a os as um uma uns umas de do da dos das'};
+const STOPS=Object.fromEntries(Object.entries(STOP).map(([k,v])=>[k,new Set(v.split(' '))]));
+const norm=s=>{
+  let o=s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f\u200c\u200d\u0640]/g,'');
+  if(LANG==='ar'||LANG==='ur')o=o.replace(/[\u064b-\u065f\u0670]/g,'').replace(/[\u0622\u0623\u0625\u0671]/g,'\u0627').replace(/[\u064a\u0649\u06cc]/g,'\u06cc').replace(/[\u0643\u06a9]/g,'\u06a9').replace(/[\u0629\u06c1\u06c2\u06c3]/g,'\u0647');
+  const st=STOPS[LANG];
+  return o.replace(/[^\p{L}\p{M}\p{N}\s]/gu,' ').split(/\s+/).filter(w=>w&&!(st&&st.has(w))).map(w=>LANG==='ar'&&w.length>4&&w.startsWith('\u0627\u0644')?w.slice(2):w).join(' ');
+};
+const sing=w=>{if(!/^(en|es|fr|pt)$/.test(LANG)||w.length<=3||!/s$/.test(w)||/ss$/.test(w))return w;return LANG==='en'?w.replace(/ies$/,'y').replace(/s$/,''):w.replace(/s$/,'')};
 const key=s=>norm(s).split(' ').filter(Boolean).map(sing).join(' ');
 function lev(a,b){const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
 const tol=l=>l<5?0:l<8?1:2;
@@ -36,7 +48,7 @@ function judge(g,it){
 
 
 /* Live photos: titles come from a date-seeded shuffle, images and aliases are pulled from Wikipedia at load time. */
-const clean=s=>s.replace(/\s*\(.*?\)\s*/g,' ').trim();
+const clean=s=>s.replace(/\s*[(（].*?[)）]\s*/g,' ').trim();
 async function card(t){try{return await cardRest(t)}catch(e){try{return await cardApi(t)}catch(e2){throw new Error('REST: '+e.message+' | API: '+e2.message)}}}
 async function cardApi(t){
   const r=await wf('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages%7Cdescription%7Cextracts%7Cinfo&inprop=url&piprop=thumbnail&pithumbsize=500&exintro=1&explaintext=1&exsentences=2&titles='+encodeURIComponent(t));
@@ -84,6 +96,29 @@ async function pick(){
   await Promise.all(ok.map(aliases));
   try{localStorage.setItem(ck,JSON.stringify(ok))}catch(e){}
   return ok;
+}
+
+/* Localised cards: photos stay the same; the name, aliases, description and article link come from the chosen language's Wikipedia. */
+const wfj=async u=>{const r=await wf(u);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+const firstSent=t=>(t||'').replace(/\s*[(（][^)）]*[)）]/g,'').split(/(?<=[。！？])|(?<=[.!?।۔؟])\s+/)[0].trim().slice(0,220);
+async function loc(c,L){
+  const j1=await wfj('https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&redirects=1&prop=langlinks&lllang='+L+'&titles='+encodeURIComponent(c.q));
+  const p1=j1.query.pages[0],ll=p1&&p1.langlinks&&p1.langlinks[0];
+  if(!ll||!ll.title)return{...c,l:L};
+  const j2=await wfj('https://'+L+'.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&origin=*&redirects=1&prop=description%7Cextracts%7Cinfo%7Credirects&inprop=url&exintro=1&explaintext=1&exsentences=2&rdlimit=40&titles='+encodeURIComponent(ll.title));
+  const p=j2.query.pages[0];
+  if(!p||p.missing||!okU(p.fullurl,WP))return{...c,l:L};
+  const a=[clean(p.title),clean(ll.title)];
+  (p.redirects||[]).forEach(x=>{const t=clean(x.title);if(t&&!/[:\d]/.test(t))a.push(t)});
+  return{...c,n:clean(p.title),a:[...new Set(a)],u:p.fullurl,ds:p.description||'',ex:firstSent(p.extract),l:L};
+}
+async function forLang(list,L){
+  if(L==='en')return list;
+  const ck='haze:loc:'+L+':'+DN;
+  try{const s=JSON.parse(localStorage.getItem(ck));if(Array.isArray(s)&&s.length===list.length&&s.every((c,i)=>validCard(c)&&c.q===list[i].q&&c.l===L))return s}catch(e){}
+  const out=await Promise.all(list.map(c=>loc(c,L).catch(e=>{console.warn('Blurred: no '+L+' text for '+c.q,e);return c})));
+  if(out.every(c=>c.l===L))try{localStorage.setItem(ck,JSON.stringify(out))}catch(e){}
+  return out;
 }
 
 /* State */
@@ -242,7 +277,7 @@ function statsHTML(){
   <h2>Daily scores</h2>
   <div class="dist">${bk.map((n,i)=>`<div class="${i===tb?'me':''}"><span>${lab[i]}</span><div class="bar"><b data-w="${n/mx*100}"></b></div><i>${n}</i></div>`).join('')}</div>`;
 }
-const legHTML=()=>`<ul class="leg"><li><i class="sw s0"></i><span>Blurred</span><b>free</b></li><li><i class="sw s1"></i><span>Soft</span><b>1</b></li><li><i class="sw s2"></i><span>Sharp</span><b>3</b></li><li><i class="sw x"></i><span>Wrong guess</span><b>−3</b></li></ul>`;
+const legHTML=()=>`<ul class="leg"><li><i class="sw s0"></i><span>Blurred</span><b>free</b></li><li><i class="sw s1"></i><span>Soft</span><b>1</b></li><li><i class="sw s2"></i><span>Sharp</span><b>2</b></li><li><i class="sw x"></i><span>Wrong guess</span><b>−3</b></li></ul>`;
 const helpHTML=()=>`<p>Tap tiles to bring the photo into focus. You have 20 points a round and three guesses. Name it with as many points left as you can. At 10 points or fewer you get a hint, and at 3 or fewer you get more.</p>${legHTML()}`;
 function bars(root){requestAnimationFrame(()=>requestAnimationFrame(()=>root.querySelectorAll('.bar b[data-w]').forEach(b=>b.style.width=b.dataset.w+'%')))}
 function renderStats(){document.querySelectorAll('.statbox').forEach(e=>{e.innerHTML=statsHTML();bars(e)})}
@@ -297,20 +332,22 @@ document.querySelectorAll('[data-s]').forEach(e=>{e.style.cssText=e.dataset.s});
 const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function mask(t,al){
   const ws=new Set();al.forEach(a=>{ws.add(a);a.split(/\s+/).forEach(w=>{if(w.length>=3)ws.add(w)})});
-  let o=t;[...ws].sort((x,y)=>y.length-x.length).forEach(w=>{o=o.replace(new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?:s|es)?\\b','gi'),'____')});
+  let o=t;[...ws].sort((x,y)=>y.length-x.length).forEach(w=>{const e=w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');o=o.replace(LANG==='zh'?new RegExp(e,'gi'):new RegExp('(?<![\\p{L}\\p{M}\\p{N}])'+e+'(?:s|es)?(?![\\p{L}\\p{M}\\p{N}])','giu'),'____')});
   return o;
 }
+const seg=w=>typeof Intl!=='undefined'&&Intl.Segmenter?[...new Intl.Segmenter(LANG,{granularity:'grapheme'}).segment(w)].map(g=>g.segment):[...w];
+const isL=g=>/\p{L}/u.test(g);
 const hintTier=r=>{if(r.done)return 0;const p=pts(r);return p<=3?2:p<=10?1:0};
 let hkey='';
 function renderHint(){
   const r=R(),it=IMG[order[st.i]],t=r&&it?hintTier(r):0,k=st.i+':'+t,e=$('hint');
   if(k===hkey)return;hkey=k;
   if(!t){e.className='hint';e.innerHTML='';return}
-  const al=[it.n,...(EXTRA[it.q]||[])],ws=it.n.split(/\s+/),ln=ws.map(w=>w.replace(/[^A-Za-z]/g,'').length),h=[];
+  const al=[it.n,...(LANG==='en'?EXTRA[it.q]||[]:[])],ws=it.n.split(/\s+/),ln=ws.map(w=>seg(w).filter(isL).length),h=[];
   if(it.ds)h.push(`<p>${esc(mask(it.ds,al))}</p>`);
   h.push(`<p>${ws.length>1?ws.length+' words: '+ln.join(' + '):ln[0]} letters</p>`);
   if(t>=2){
-    h.push(`<p class="lt">${esc(ws.map(w=>[...w].map((c,i)=>i===0?c.toUpperCase():/[A-Za-z]/.test(c)?'_':c).join(' ')).join('   '))}</p>`);
+    h.push(`<p class="lt">${esc(ws.map(w=>seg(w).map((c,i)=>i===0?c.toUpperCase():isL(c)?'_':c).join(' ')).join('   '))}</p>`);
     if(it.ex)h.push(`<p>${esc(mask(it.ex,al))}</p>`);
   }
   e.className='hint t'+t;e.innerHTML=h.join('');SFX.hint();
@@ -338,6 +375,7 @@ function tests(){
     ['wrong guess costs 3',()=>pts({lv:Array(N*N).fill(0),wr:2})===14],
     ['points stop at 0',()=>pts({lv:Array(N*N).fill(2),wr:3})===0],
     ['today’s five are distinct',()=>!IMG.length||(IMG.length===ROUNDS&&new Set(IMG.map(i=>i.n)).size===ROUNDS)],
+    ['Indonesian, Hindi, Chinese and Arabic guesses match',()=>{const k=LANG;try{LANG='id';const a=g('gajah','Gajah')==='hit';LANG='hi';const b=g('हाथी','हाथी')==='hit';LANG='zh';const c=g('长颈鹿','长颈鹿')==='hit';LANG='ar';const d=g('الزَرافة','زرافة')==='hit';return a&&b&&c&&d}finally{LANG=k}}],
     ['score curve is sane',()=>pct(0)<5&&pct(100)>95&&pct(55)===50]
   ];
   return T.map(([n,f])=>{let ok=false;try{ok=!!f()}catch(e){}return[n,ok]});
@@ -360,7 +398,7 @@ $('db').addEventListener('click',e=>{
   else if(a==='peek'){const it=IMG[order[st.i]];$('pk').textContent=it?it.n:'No photo in play.'}
   else{try{
     if(a==='reset'){localStorage.removeItem(SK);if(!OFF){delete days[DN];localStorage.setItem(STK,JSON.stringify(days))}}
-    else Object.keys(localStorage).filter(k=>k.startsWith('haze:')&&k!==TK&&k!==SNK&&k!=='haze:cid').forEach(k=>localStorage.removeItem(k));
+    else Object.keys(localStorage).filter(k=>k.startsWith('haze:')&&k!==TK&&k!==SNK&&k!==LK&&k!=='haze:cid').forEach(k=>localStorage.removeItem(k));
   }catch(x){}location.reload()}
 });
 let devOK=false;try{devOK=sessionStorage.getItem('haze:dev:ok')==='1'}catch(e){}
@@ -377,13 +415,28 @@ $('db').addEventListener('submit',async e=>{
   if(ok){devOK=true;try{sessionStorage.setItem('haze:dev:ok','1')}catch(x){}$('db').innerHTML=devHTML()}
   else{fails++;if(fails>=5){lockUntil=Date.now()+30000;fails=0}$('pe').textContent='Wrong password.';$('pw').value='';const f=$('dg');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}
 });
-const DL={s:['Your record',statsHTML],h:['How Blurred works',helpHTML],c:['Copyright and credits',creditHTML],d:['Developer tests',devGate]};
+const langHTML=()=>`<ul class="lang">${LANGS.map(([c,n,e])=>`<li><button type="button" data-lang="${c}" lang="${c}" aria-pressed="${c===LANG}"><span>${n}</span><small>${e}</small></button></li>`).join('')}</ul>`;
+let lseq=0;
+async function setLang(c){
+  if(!LANGS.some(l=>l[0]===c))return;
+  if(c===LANG){closeDlg();return}
+  LANG=c;try{localStorage.setItem(LK,c)}catch(e){}
+  document.documentElement.lang=c==='zh'?'zh-Hans':c;closeDlg();
+  if(!ENG.length)return;
+  const my=++lseq,nm=LANGS.find(l=>l[0]===c)[1];say('…');
+  const l=await forLang(ENG,c);if(my!==lseq)return;
+  IMG=l;hkey='';
+  if(!$('sum').hidden){$('rows').querySelectorAll('li').forEach((li,k)=>{const a=li.querySelector('a'),it=IMG[order[k]];a.textContent=it.n;a.href=it.u})}
+  else{ui();const r=R(),it=IMG[order[st.i]];say(r.done?(r.win?`${it.n}. ${pts(r)} points.`:`It was ${it.n}.`):`${nm}. Photo ${st.i+1} of ${ROUNDS}.`)}
+}
+$('db').addEventListener('click',e=>{const b=e.target.closest('[data-lang]');if(b)setLang(b.dataset.lang)});
+const DL={l:['Language',langHTML],s:['Your record',statsHTML],h:['How Blurred works',helpHTML],c:['Copyright and credits',creditHTML],d:['Developer tests',devGate]};
 
 /* Dialogs for narrow screens, with a fade and lift. */
 const dlg=$('dlg');
 function openDlg(k){lastF=document.activeElement;const[t,f]=DL[k];$('dt').textContent=t;$('db').innerHTML=f();dlg.showModal();requestAnimationFrame(()=>{dlg.classList.add('open');bars($('db'))})}
 function closeDlg(){dlg.classList.remove('open');setTimeout(()=>{dlg.close();if(lastF&&lastF.focus)lastF.focus()},RM?0:250)}
-$('bs').onclick=()=>openDlg('s');$('bh').onclick=()=>openDlg('h');$('dx').onclick=closeDlg;$('bc').onclick=()=>openDlg('c');
+$('bl').onclick=()=>openDlg('l');$('bs').onclick=()=>openDlg('s');$('bh').onclick=()=>openDlg('h');$('dx').onclick=closeDlg;$('bc').onclick=()=>openDlg('c');
 {let n=0,t=0,buf='';
  document.querySelector('h1').addEventListener('click',()=>{const w=Date.now();n=w-t<1500?n+1:1;t=w;if(n>=5){n=0;if(DEV&&!dlg.open)openDlg('d')}});
  addEventListener('keydown',e=>{if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName)||e.key.length!==1)return;buf=(buf+e.key.toLowerCase()).slice(-7);if(DEV&&buf==='devmode'&&!dlg.open){buf='';openDlg('d')}});}
@@ -491,7 +544,7 @@ async function liveSync(total){
 }
 
 /* Housekeeping: drop per-day keys older than a week so storage doesn't grow forever. */
-function prune(){try{Object.keys(localStorage).forEach(k=>{const m=k.match(/^haze:(?:v5:pick|v3|dev|posted):(\d+)$/);if(m&&+m[1]<DN-7)localStorage.removeItem(k)})}catch(e){}}
+function prune(){try{Object.keys(localStorage).forEach(k=>{const m=k.match(/^haze:(?:v5:pick|v3|dev|posted|loc:[a-z]+):(\d+)$/);if(m&&+m[1]<DN-7)localStorage.removeItem(k)})}catch(e){}}
 /* Focus: the answer box on devices with a mouse, the Next button once a round ends (also closes the phone keyboard). */
 const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches;
 const focusNext=()=>setTimeout(()=>{const b=$('next');if(b.offsetParent)b.focus({preventScroll:true})},60);
@@ -500,7 +553,7 @@ const focusNext=()=>setTimeout(()=>{const b=$('next');if(b.offsetParent)b.focus(
 prune();renderSet();renderStats();
 async function boot(){
   $('retry').hidden=true;say('Finding today’s photos…');
-  try{IMG=await pick()}catch(e){console.warn('Blurred: load failed',e);const d=e instanceof Error?e.name+': '+e.message:'photo data incomplete';say('Couldn’t load photos ('+d+'). If you’re viewing this in a preview, open it in a regular browser.',true);$('retry').hidden=false;return}
+  try{ENG=await pick();IMG=await forLang(ENG,LANG)}catch(e){console.warn('Blurred: load failed',e);const d=e instanceof Error?e.name+': '+e.message:'photo data incomplete';say('Couldn’t load photos ('+d+'). If you’re viewing this in a preview, open it in a regular browser.',true);$('retry').hidden=false;return}
   if(st.i>=ROUNDS)summary(false);else load();
 }
 $('retry').onclick=boot;boot();
