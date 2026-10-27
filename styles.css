@@ -116,7 +116,7 @@ dialog.open::backdrop{opacity:1}
 @media (min-width:980px){
   .wrap{grid-template-columns:230px 480px 230px;gap:52px;justify-content:center;align-items:start}
   .rail{display:block}
-  .how,#chips,.hr .ib{display:none}
+  .how,#chips,.hr .ib:not(#bl){display:none}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}}
 
